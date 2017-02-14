@@ -1,0 +1,40 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "__title__" %}</title>
+</head>
+<body>
+    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}" />
+        <script>
+            console.log('{{ redirect_to }}')
+        </script>
+        <select name="language">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                    {{ language.name_local }} ({{ language.code }})
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go" />
+    </form>
+
+    <div id="server_i18n">
+        <h5>{{ serverTitle_i18n }}</h5>
+        <h5>{{ serverBody_i18n }}</h5>
+    </div>
+    <div id="template_i18n">
+        <h5>{% trans "tempTitle_i18n" %}</h5>
+        <h5>{% trans "tempBody_i18n" %}</h5>
+    </div>
+    <div id="js_i18n">
+    </div>
+</body>
+</html>
